@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+
+<property name="LOG_DIR" value="/bellsoft/logs/exchangeUpdater" />
+    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} [%file:%line] -%msg%n"/>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/admin-web-app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            daily rollover
+            <fileNamePattern>${LOG_DIR}/admin-web-app.log.%d{yyyy-MM-dd}.log</fileNamePattern>
+            keep 30 days' worth of history
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                ${LOG_PATTERN}
+            </pattern>
+        </encoder>
+    </appender>
+	<logger name="org.springframework" level="DEBUG" >
+	    <appender-ref ref="STDOUT" />
+	    <appender-ref ref="FILE" />
+    </logger>
+     <!-- Query Loggers -->
+    <logger name="jdbc" level="OFF"/>
+
+  	<logger name="jdbc.sqlonly" level="DEBUG" additivity="false">
+    	<appender-ref ref="STDOUT" />
+    	 <appender-ref ref="FILE"/>
+  	</logger>
+
+  	<!-- log SQL with timing information, post execution -->
+	<logger name="jdbc.sqltiming" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE"/>
+	</logger>
+
+  	<logger name="jdbc.resultsettable" level="DEBUG" additivity="false">
+    	<appender-ref ref="STDOUT" />
+    	 <appender-ref ref="FILE"/>
+  	</logger>
+    <!-- turn OFF all logging (children can override) -->
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

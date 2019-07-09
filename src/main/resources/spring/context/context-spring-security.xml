@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd">
+    <!--
+    hasRole([role]) Returns true if the current principal has the specified role.
+    hasAnyRole([role1,role2])   Returns true if the current principal has any of the supplied roles (given as a comma-separated list of strings)
+    principal   Allows direct access to the principal object representing the current user
+    authentication  Allows direct access to the current Authentication object obtained from the SecurityContext
+    permitAll   Always evaluates to true
+    denyAll Always evaluates to false
+    isAnonymous()   Returns true if the current principal is an anonymous user
+    isRememberMe()  Returns true if the current principal is a remember-me user
+    isAuthenticated()   Returns true if the user is not anonymous
+    isFullyAuthenticated()  Returns true if the user is not an anonymous or a remember-me user
+    참고 사이트 : https://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html
+    -->
+    
+   <!--  <http pattern="/assets/**" security="none"/>
+    <http pattern="/resources/**" security="none"/> -->
+    
+    <!-- 확장자 패턴 /**/*.extern ant 규칙 -->
+   <!--  <http pattern="/**/*.js" security="none"/>
+    <http pattern="/**/*.css" security="none"/>
+    <http pattern="/img/*" security="none"/> -->
+    
+    <http auto-config='true' use-expressions="true"> <!-- use-expressions : spring el 태크 사용 true  ex>permitAll-->
+        <!-- hasAnyRole, hasAnyAuthority-->
+        <intercept-url pattern="/merchants/**" access="hasAnyAuthority('ADMIN','USER')"/>
+       
+        <intercept-url pattern="/login/loginForm" access="permitAll"/>
+        <intercept-url pattern="/login/logout" access="permitAll"/>
+        <intercept-url pattern="/j_spring_security_check" access="permitAll" />
+        <intercept-url pattern="/main" access="permitAll"/>
+        <intercept-url pattern="/index" access="hasAuthority('ADMIN')"/>
+        <intercept-url pattern="/**" access="permitAll"/>
+        
+        <form-login login-page="/login/loginForm"
+                    
+                    login-processing-url="/j_spring_security_check"
+                    
+                    username-parameter="loginId"
+                    password-parameter="loginPwd"
+                    default-target-url="/"
+                    authentication-failure-url="/login/loginForm?fail=true"
+                    
+                    />
+                   <!--authentication-success-handler-ref="customAuthenticationSuccessHandler"
+                    authentication-failure-handler-ref="customAuthenticationFailureHandler"
+                    -->
+                    <!-- login-page : 로그인화면 URL 지정 인증을 받지 않은 상태에서 권한이 필요한화면을 접근할 경우 인증을 받기 위해 로그인 화면 띄우기위한 경로-->
+                    <!-- default-target-url : 로그인 성공시 어떤페이지를 보여줄지 설정하는 속성 -->
+                    <!-- always-use-default-target : 로그인 성공시  사용자가 접근한 경로가 아닌 항상  default-target-url 경로로만 이동되게 설정 true-->
+                    <!-- always-use-default-target : 로그인 실패시 보여주는 화면 url 경로 현재는 실패시 다시 로그인 화면으로 이동하여 로그인다시 하게 구현 -->
+        
+        <anonymous granted-authority="ANONYMOUS" />
+       
+        <logout 
+        logout-url="/login/logout"
+            logout-success-url="/login/loginForm?logout=true"
+            delete-cookies="JSESSIONID"
+            invalidate-session="true"
+        />
+        <!-- logout-url="/j_spring_security_logout"  -->
+        
+        
+        
+        <!-- csrf off security 4.0 over 만약 csrf를 on하면 로그아웃 부분을 post 요청으로 변경해야됨.-->
+        <csrf disabled="false"/>
+        
+        <access-denied-handler ref="accessDeniedHandler"/>
+        
+    <!-- ajax 세션처리를 위한 필터 선언 -->
+    <custom-filter after="EXCEPTION_TRANSLATION_FILTER" ref="ajaxSessionTimeoutFilter"/>
+    <!-- before 필터 -->
+    <!-- <custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptor"/> -->
+    
+    <csrf request-matcher-ref="csrfMatcher"/>
+      
+    </http>
+    <!-- ajax 세션처리를 위한 필터 선언 -->
+    <beans:bean id="ajaxSessionTimeoutFilter" class="com.bellsoft.updater.common.filter.AjaxSessionCheckFilter">
+        <beans:property name="ajaxHeader" value="AJAX" />
+    </beans:bean>
+    
+    <!-- acessDeniedHandler -->
+    <beans:bean id="accessDeniedHandler" class="com.bellsoft.updater.common.handler.AccessDeniedHandlerImpl">
+        <beans:property name="ajaxHeader" value="AJAX"/>
+        <beans:property name="errorPage" value="/common/access-denied" />
+        
+    </beans:bean>
+
+    <beans:bean id="loginService" class="com.bellsoft.updater.login.service.LoginService"></beans:bean>
+    <beans:bean id="customeAuthenticationProvider" class="com.bellsoft.updater.login.component.CustomAuthenticationProvider"></beans:bean> 
+    
+    <!-- <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean> -->
+    <authentication-manager>
+        <authentication-provider ref="customeAuthenticationProvider">
+        </authentication-provider>
+        <authentication-provider user-service-ref="loginService">
+           <password-encoder ref="bcryptPasswordEncoder" />
+            <!-- <password-encoder ref="encoder"></password-encoder> -->
+        </authentication-provider>
+    </authentication-manager>
+    
+    
+  <!--   <beans:bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+        <beans:property name="authenticationManager" ref="org.springframework.security.authenticationManager" />
+        <beans:property name="accessDecisionManager" ref="accessDecisionManager" />
+        <beans:property name="securityMetadataSource" ref="reloadableFilterInvocationSecurityMetadataSource" />
+    </beans:bean> -->
+    
+    <!-- 
+    <beans:bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <beans:constructor-arg>
+            <beans:list>
+                <beans:bean class="org.springframework.security.access.vote.RoleVoter">
+                    <beans:property name="rolePrefix" value="" />
+                </beans:bean>
+            </beans:list>
+        </beans:constructor-arg>
+        <beans:property name="allowIfAllAbstainDecisions" value="false" />
+    </beans:bean> 
+    
+    <beans:bean id="defaultWebSecurityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+        <beans:property name="defaultRolePrefix" value=""/>
+    </beans:bean>
+
+    <beans:bean id="defaultMethodSecurityExpressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
+            <beans:property name="defaultRolePrefix" value=""/>
+    </beans:bean> 
+    -->
+
+    <beans:bean id="customAuthenticationSuccessHandler" class="com.bellsoft.updater.login.handler.CustomAuthenticationSuccessHandler">
+        <beans:property name="targetUrlParameter" value="loginRedirect" />
+        <beans:property name="useReferer" value="false" />
+        <beans:property name="defaultUrl" value="/" />
+    </beans:bean>
+    
+    <beans:bean id="customAuthenticationFailureHandler" class="com.bellsoft.updater.login.handler.CustomAuthenticationFailureHandler">
+        <beans:property name="loginIdName" value="loginId" />
+        <beans:property name="loginPasswordName" value="loginPwd" />
+        <beans:property name="loginRedirectName" value="loginRedirect" />
+        <beans:property name="exceptionMessageName" value="securityexceptionmsg" />
+        <beans:property name="defaultFailureUrl" value="/login/loginForm?fail=true" />
+    </beans:bean>
+    
+    <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+    
+
+</beans:beans>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bellsoft.updater.api.v1.dao.common.CommonDAO">
+
+     <!-- PK 생성 프로시저 -->
+    <select id="callProcInsertPk" statementType="CALLABLE" parameterType="hashmap">
+    {
+         call sim_seq_reg01_sp
+         (
+              #{pkCd,mode=IN,jdbcType=CHAR}  <!-- 'FM'  -->
+            , #{outParam01,mode=OUT,jdbcType=VARCHAR}
+            , #{outParam02,mode=OUT,jdbcType=VARCHAR}
+            , #{outParam03,mode=OUT,jdbcType=VARCHAR}
+         )
+    }
+    </select>
+
+
+
+
+</mapper>

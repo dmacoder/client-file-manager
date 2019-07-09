@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bellsoft.updater.api.v1.dao.file.UpdaterDAO">
+
+    <!-- 파일 삭제 -->
+    <delete id="deleteFileByFileId">
+        DELETE FROM fim_client_file_tb WHERE FILE_ID = #{fileId}
+    </delete>
+    
+    <insert id="insertFile" >
+    
+        insert into 
+        fim_client_file_tb(
+            file_id
+            ,file_version
+            ,file_nm
+            ,file_size
+            ,file_hash
+            ,file_download_path
+            ,reg_id
+            ,reg_date
+            ,mod_id
+            ,mod_date
+            ,ipaddress
+        
+        ) 
+        
+        values(
+        #{fileId}
+        ,#{fileVersion}
+        ,#{fileNm}
+        ,#{fileSize}
+        ,#{fileHash}
+        ,#{fileDownloadPath}
+        ,#{regId}
+        ,now()
+        ,#{regId}
+        ,now()
+        ,#{ipaddress}
+        
+        )
+    
+    
+    </insert>
+
+
+    <select id="selectListClientFiles" resultType="HashMap" parameterType="CustomParamMap">
+        SELECT @rownum := @rownum + 1 AS no, Tb.*
+
+            FROM (
+                    SELECT
+                        FILE_ID AS fileId
+                        ,file_Version AS fileVersion
+                        ,file_nm AS fileNm
+                        ,FILE_SIZE AS fileSize
+                        ,file_hash as fileHash
+                        ,file_download_path as fileDownloadPath
+                        ,DATE_FORMAT(fcft.REG_DATE,'%Y-%m-%d %T') AS regDate
+                        ,fcft.REG_ID AS regId
+                        ,fcft.MOD_ID AS modId
+                        ,DATE_FORMAT(fcft.MOD_DATE,'%Y-%m-%d %T') AS modDate
+                        ,sat.admin_nm AS adminNm
+                        ,ipaddress
+                    FROM fim_client_file_tb fcft
+                    LEFT JOIN sim_admin_tb sat
+                    ON fcft.reg_id = sat.login_id
+                    INNER JOIN ( SELECT @rownum := 0) R
+                    
+                    <if test='paramMap.fileId != null and paramMap.fileId != ""'>
+                        WHERE FILE_ID = #{paramMap.fileId}
+                    </if>
+                    
+                    ORDER BY file_Version desc, fcft.reg_date desc
+                    
+                 ) Tb
+            
+           GROUP BY fileNm
+
+    </select>
+    
+    <select id="selectClientFileByFileId" resultType="HashMap"  parameterType="String">
+    
+        SELECT
+            FILE_ID AS fileId
+            ,file_Version AS fileVersion
+            ,file_nm AS fileNm
+            ,FILE_SIZE AS fileSize
+            ,file_hash as fileHash
+            ,file_download_path as fileDownloadPath
+            ,DATE_FORMAT(fcft.REG_DATE,'%Y-%m-%d %T') AS regDate
+            ,fcft.REG_ID AS regId
+            ,fcft.MOD_ID AS modId
+            ,DATE_FORMAT(fcft.MOD_DATE,'%Y-%m-%d %T') AS modDate
+            ,sat.admin_nm AS adminNm
+            ,ipaddress
+        FROM fim_client_file_tb fcft
+        LEFT JOIN sim_admin_tb sat
+        ON fcft.reg_id = sat.login_id
+       
+            WHERE FILE_ID = #{fileId}
+                    
+    
+    </select>
+
+
+</mapper>
