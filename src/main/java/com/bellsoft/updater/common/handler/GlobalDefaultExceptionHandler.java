@@ -79,7 +79,7 @@ public class GlobalDefaultExceptionHandler {
         modelAndView.setViewName(DEFAULT_ERROR_VIEW);
 
         ApiResponseMessage errorResp = new ApiResponseMessage();
-        errorResp.setStatus("fail");
+        errorResp.setStatus(400);
         errorResp.setTimestamp(new Date());
         errorResp.setCode("Unknown");
         errorResp.setDetail(e.toString());

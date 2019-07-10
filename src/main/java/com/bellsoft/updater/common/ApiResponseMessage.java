@@ -22,14 +22,14 @@ public class ApiResponseMessage implements Serializable{
     private static final long serialVersionUID = 4594951705192880286L;
 
     //response status 응답 상태
-    private String status; //ok,fail
+    private int status; //ok=200, fail(BAD_REQUEST=400, NOT_FOUND=404 .. )
     
     /*
-     * HttpStatus Code 200,400,404,500와는 다른 코드로 
+     * HttpStatus Code 200,400,404,500와는 다른 유니크한 코드로 
      * 404 NOT FOUND의 경우에 API에 요청은 정상적으로 전달되었지만 
      * 데이터가 없는 경우 별도의 예외 코드(E1000,E1001,E1002 등)로 구분할수 있게 하기 위함  
      */
-    //Error Code 에러코드
+    //Error Code 에러코드 (에러에 할당되는 유니크한 코드값입니다.)
     private String code; 
     
     //timeStamp -> UTC + 9
@@ -50,7 +50,7 @@ public class ApiResponseMessage implements Serializable{
         
     }
 
-    public ApiResponseMessage(String status, String code, String message, String detail, String moreInfo, Date timestamp) {
+    public ApiResponseMessage(int status, String code, String message, String detail, String moreInfo, Date timestamp) {
         
         this.status = status;
         this.code = code;

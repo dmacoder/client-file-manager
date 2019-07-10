@@ -1,12 +1,13 @@
 package com.bellsoft.updater.common;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public class CustomParamMap {
 
-	HashMap<String, Object> paramMap = new HashMap<String, Object>();
+    Map<String, Object> paramMap = new HashMap<String, Object>();
 
 	public CustomParamMap() {
 
@@ -52,11 +53,11 @@ public class CustomParamMap {
         return paramMap.isEmpty();
     }
 
-    public void putAll(HashMap<? extends String, ?extends Object> m){
+    public void putAll(Map<? extends String, ?extends Object> m){
     	paramMap.putAll(m);
     }
 
-    public HashMap<String,Object> getHashMap(){
+    public Map<String,Object> getHashMap(){
         return paramMap;
     }
 
@@ -64,3 +65,4 @@ public class CustomParamMap {
     	return String.valueOf(paramMap);
     }
 }
+

@@ -42,7 +42,7 @@ public class RestResponseEntityExceptionHandler {
     public Object handleForbiddenException(AccessForbiddenException e,HttpServletRequest req ){
         
         ApiResponseMessage errorResp = new ApiResponseMessage();
-        errorResp.setStatus("fail");
+        errorResp.setStatus(403);
         errorResp.setTimestamp(new Date());
         errorResp.setCode("E1002");
         errorResp.setDetail(e.getDetail());
@@ -81,7 +81,7 @@ public class RestResponseEntityExceptionHandler {
     @ExceptionHandler(FileIdNotFoundException.class)
     public ResponseEntity<ApiResponseMessage> handleFileIdNotFoundExceptionException(FileIdNotFoundException e){
         ApiResponseMessage errorResp = new ApiResponseMessage();
-        errorResp.setStatus("fail");
+        errorResp.setStatus(404);
         errorResp.setTimestamp(new Date());
         errorResp.setCode("E1005");
         errorResp.setDetail(e.getDetail());

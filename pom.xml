@@ -98,6 +98,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        
         <!-- spring securiy -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
