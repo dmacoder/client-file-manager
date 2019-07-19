@@ -18,5 +18,5 @@ public class FileVO {
     private String regDate;
     private String modId;
     private String modDate;
-    private String ipaddress;
+    private String ipAddress;
 }

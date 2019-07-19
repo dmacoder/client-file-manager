@@ -18,14 +18,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -33,7 +33,7 @@ import com.bellsoft.updater.api.v1.exception.FileIdNotFoundException;
 import com.bellsoft.updater.api.v1.service.common.CommonService;
 import com.bellsoft.updater.api.v1.service.file.UpdaterService;
 import com.bellsoft.updater.common.CustomParamMap;
-import com.bellsoft.updater.common.util.InetUtil;
+import com.bellsoft.updater.common.util.InetUtils;
 import com.bellsoft.updater.common.util.UploadFileUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -105,6 +105,7 @@ public class UpdaterRestController {
 
         paramMap.put("regId", principal.getName());
         paramMap.put("modId", principal.getName());
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 
         List<Map<String, Object>> uploadMapList;
 
@@ -133,7 +134,8 @@ public class UpdaterRestController {
 
                 fileMap.put("fileId", fileIdPk);
 
-                fileMap.put("ipaddress", InetUtil.getHost4Address());
+                
+                fileMap.put("ipAddress", InetUtils.getIpAddress(request));
 
                 updaterService.createFile(fileMap);
 

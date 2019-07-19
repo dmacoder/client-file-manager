@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ,reg_date
             ,mod_id
             ,mod_date
-            ,ipaddress
+            ,ip_address
         
         ) 
         
@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ,now()
         ,#{regId}
         ,now()
-        ,#{ipaddress}
+        ,#{ipAddress}
         
         )
     
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         ,fcft.MOD_ID AS modId
                         ,DATE_FORMAT(fcft.MOD_DATE,'%Y-%m-%d %T') AS modDate
                         ,sat.admin_nm AS adminNm
-                        ,ipaddress
+                        ,ip_address
                     FROM fim_client_file_tb fcft
                     LEFT JOIN sim_admin_tb sat
                     ON fcft.reg_id = sat.login_id
@@ -95,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ,fcft.MOD_ID AS modId
             ,DATE_FORMAT(fcft.MOD_DATE,'%Y-%m-%d %T') AS modDate
             ,sat.admin_nm AS adminNm
-            ,ipaddress
+            ,ip_address as ipAddress
         FROM fim_client_file_tb fcft
         LEFT JOIN sim_admin_tb sat
         ON fcft.reg_id = sat.login_id
