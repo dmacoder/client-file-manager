@@ -35,15 +35,11 @@ public class LoginService implements UserDetailsService{
         String[] roles=adminUserVO.getAuthority().split(",");
         for(String role:roles){
             
-            if(adminUserVO.getPartGbNm().equals("개발")&&role.equals("ADMIN")) {
-                list.add(new SimpleGrantedAuthority("ADMIN_DEVELOPER"));
-            }
+           
             list.add(new SimpleGrantedAuthority(role));
         }
         
-        if(adminUserVO.getPartGbNm().equals("개발")) {
-            list.add(new SimpleGrantedAuthority("DEVELOPER"));
-        }
+        
         
         //커스텀 로그인 정보를 리턴
         MemberInfo user = new MemberInfo(adminUserVO.getAdminId(), loginId, adminUserVO.getLoginPwd()

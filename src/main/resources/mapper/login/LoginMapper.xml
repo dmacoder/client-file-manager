@@ -10,16 +10,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			,a.LOGIN_PWD AS loginPwd
 			,a.LOGIN_ID AS loginId
 			,a.ADMIN_NM AS adminNm
-            ,a.OP_RULE AS opRule
-            ,sim_lst_codenm_fc('H0001',a.OP_RULE) AS opRuleNm
-			,a.PHONE_NO AS phoneNo
+            
 			,a.AUTH_GRANT AS authGrant
             ,sim_lst_codenm_fc('H0002',a.auth_grant) AS authority
-            ,a.PART_GB AS partGb
-            ,sim_lst_codenm_fc('H0003',a.PART_GB) AS partGbNm
             
-            ,a.position_lv AS positionLv
-            ,sim_lst_codenm_fc('H0004',a.position_lv) AS positionLvNm
             ,a.phone_no AS phoneNo
             ,a.notify_tp AS  notifyTp
             ,sim_lst_codenm_fc('H0005',a.notify_tp) AS notifyTpNm

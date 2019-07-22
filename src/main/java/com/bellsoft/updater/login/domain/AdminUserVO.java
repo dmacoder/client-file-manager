@@ -13,16 +13,10 @@ public class AdminUserVO {
 	private String loginId;
 	private String loginPwd;
 	private String adminNm;
-	private String opRule;
-	private String opRuleNm;
 	
 	private String authGrant; //사실 맵핑 필요 없음 function을 호출해서 코드번호에 맞는 권한값 ADMIN USER를  authority에저장
 	private String authority; //사용자 권한
-	private String partGb;
-	private String partGbNm;
 	
-	private String positionLv;
-	private String positionLvNm;
 	private String phoneNo;
 	private String notifyTp;
 
