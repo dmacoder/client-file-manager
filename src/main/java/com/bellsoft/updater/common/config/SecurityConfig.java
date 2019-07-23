@@ -39,10 +39,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .passwordParameter("loginPwd")
         .permitAll()
         
+   
+        
         .and()
         .logout()
         .logoutUrl("/login/logout")
         .logoutSuccessUrl("/login/loginForm?logout=true")
+        .permitAll()
         
         .and()
         .exceptionHandling().accessDeniedPage("/common/access-denied")

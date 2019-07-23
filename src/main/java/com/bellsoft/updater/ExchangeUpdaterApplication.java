@@ -1,11 +1,13 @@
 package com.bellsoft.updater;
 
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
@@ -22,6 +24,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.bellsoft.updater.common.resolver.CustomMapArgumentResolver;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @SpringBootApplication
 @EnableWebSecurity
 // @MapperScan(basePackages = "com.bellsoft.updater.api.v1.dao")
@@ -34,14 +39,24 @@ public class ExchangeUpdaterApplication extends WebMvcConfigurerAdapter {
         SpringApplication.run(ExchangeUpdaterApplication.class, args);
     }
 
-    @Autowired
-    private CustomMapArgumentResolver customMapArgumentResolver;
+    @PostConstruct
+    public void init(){
+      // Setting Spring Boot SetTimeZone
+      TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+      log.info("한국 표준시 KST: " + new Date().toString());
+    }
+    
+    @Bean
+    public CustomMapArgumentResolver customMapArgumentResolver() {
+        CustomMapArgumentResolver bean = new CustomMapArgumentResolver();
+        return bean;
+    }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(customMapArgumentResolver);
+        argumentResolvers.add(customMapArgumentResolver());
     }
-
+    
     /*
      * @Override public void addInterceptors (InterceptorRegistry registry) { registry.addInterceptor(new LoginInterceptor()); }
      */

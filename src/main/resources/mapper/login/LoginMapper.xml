@@ -12,11 +12,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			,a.ADMIN_NM AS adminNm
             
 			,a.AUTH_GRANT AS authGrant
-            ,sim_lst_codenm_fc('H0002',a.auth_grant) AS authority
+            ,sim_lst_codenm_fc('A0001',a.auth_grant) AS authority
             
             ,a.phone_no AS phoneNo
             ,a.notify_tp AS  notifyTp
-            ,sim_lst_codenm_fc('H0005',a.notify_tp) AS notifyTpNm
+            ,sim_lst_codenm_fc('A0002',a.notify_tp) AS notifyTpNm
             
             ,a.reg_date AS  regDate
             ,a.reg_id AS  regId
