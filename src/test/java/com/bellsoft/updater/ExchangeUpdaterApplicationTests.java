@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @WebAppConfiguration
 @Slf4j
-@ContextConfiguration(locations = { "file:src/main/resources/spring/**/*.xml" })
 public class ExchangeUpdaterApplicationTests {
 
 	@Test

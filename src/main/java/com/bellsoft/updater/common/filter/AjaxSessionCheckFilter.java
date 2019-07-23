@@ -22,7 +22,7 @@ public class AjaxSessionCheckFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(AjaxSessionCheckFilter.class);
     
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        //logger.info("ajax check filter ajax : "+ajaxHeader);
+        logger.info("ajax check filter 값 : "+ajaxHeader);
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         if (isAjaxRequest(req)) {
@@ -41,7 +41,7 @@ public class AjaxSessionCheckFilter implements Filter {
     }
 
     private boolean isAjaxRequest(HttpServletRequest req) {
-        //logger.info("get header : "+req.getHeader(ajaxHeader));
+        logger.info("get AJAX header : "+req.getHeader(ajaxHeader));
         return req.getHeader(ajaxHeader) != null    && req.getHeader(ajaxHeader).equals(Boolean.TRUE.toString());
     }
 

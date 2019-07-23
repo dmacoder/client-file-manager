@@ -14,10 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +34,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.bellsoft.updater.api.v1.domain.file.FimClientFileTb;
 import com.bellsoft.updater.api.v1.exception.FileIdNotFoundException;
 import com.bellsoft.updater.api.v1.service.common.CommonService;
 import com.bellsoft.updater.api.v1.service.file.UpdaterService;
@@ -243,5 +249,11 @@ public class UpdaterRestController {
         }
 
         return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+    }
+    
+    
+    @GetMapping("/client-files/list")
+    public  Page<FimClientFileTb> list(@PageableDefault Pageable pageable, Model model) {
+        return updaterService.findClientFileList(pageable);
     }
 }

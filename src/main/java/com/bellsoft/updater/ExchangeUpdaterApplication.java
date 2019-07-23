@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootApplication
 @EnableWebSecurity
 // @MapperScan(basePackages = "com.bellsoft.updater.api.v1.dao")
-@ImportResource({ "classpath:/spring/context/context-spring-security.xml" })
+//@ImportResource({ "classpath:/spring/context/context-spring-security.xml" })
 public class ExchangeUpdaterApplication extends WebMvcConfigurerAdapter {
 
     private int maxUploadSizeInMb = 5 * 1024 * 1024; // 5 MB

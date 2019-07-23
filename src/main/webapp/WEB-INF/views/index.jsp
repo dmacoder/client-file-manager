@@ -86,10 +86,16 @@
                                 $("#fileList").html(innerHTML);
                                 
                             },
-                            error : function(e) {
-                                alert("파일 업로드시 오류 발생 :" + e.responseText);
-                                isSuccess = false;
-                            }
+                            error:function(xhr,status,error) {
+                  				 if (xhr.status == 404) {
+               				     popLayerMsg("등록된 파일이 없습니다.");
+               		             return false;
+               		            
+               		         } else{
+               		             var json = JSON.parse(xhr.responseText);
+               		        	 alert(xhr.responseText);
+               		         }
+               		     }
                             
                         });
                         
@@ -182,9 +188,23 @@
                                     
 
                                 },
-                                error : function(e) {
-                                    alert("파일 업로드시 오류 발생 :" + e.responseText);
+                                error : function(xhr, status, error) {
                                     isSuccess = false;
+                                    
+                                    if (xhr.status == 401) {
+                                        alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+                                        $(".b-close").click();
+                                        location.href = "/j_spring_security_logout";
+                                    } else if (xhr.status == 403) {
+                                        alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+                                        $(".b-close").click();
+                                        location.href = "/j_spring_security_logout";
+                                    } else {
+                                        alert("파일 업로드시 오류 발생 :" + xhr.responseText);
+                                    }
+                                    
+                                   
+                                    
                                 }
                             });
                             

@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         ,fcft.MOD_ID AS modId
                         ,DATE_FORMAT(fcft.MOD_DATE,'%Y-%m-%d %T') AS modDate
                         ,sat.admin_nm AS adminNm
-                        ,ip_address
+                        ,ip_address as ipAddress
                     FROM fim_client_file_tb fcft
                     LEFT JOIN sim_admin_tb sat
                     ON fcft.reg_id = sat.login_id
